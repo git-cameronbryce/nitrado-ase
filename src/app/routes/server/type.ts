@@ -12,3 +12,8 @@ export interface ServerResponse {
     }[];
   };
 }
+
+export interface ActionResponse {
+  status: string;
+  message: string;
+}
