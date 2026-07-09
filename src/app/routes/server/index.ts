@@ -1,6 +1,6 @@
 import type { KyInstance } from "ky";
 import { http } from "@/app/routes/http";
-import { get, stop, restart } from "@/app/routes/server/logic";
+import { get, stop, restart, gameserver } from "@/app/routes/server/logic";
 
 export class ServerRouter {
   private readonly http: KyInstance;
@@ -11,6 +11,10 @@ export class ServerRouter {
         Authorization: `Bearer ${this.token}`,
       },
     });
+  }
+
+  gameserver(id: number) {
+    return gameserver(this.http, id);
   }
 
   restart(id: number) {
