@@ -1,5 +1,15 @@
-import type { ServerResponse, ActionResponse } from "@/app/routes/server/type";
+import type {
+  ServerResponse,
+  ActionResponse,
+  GameserverResponse,
+} from "@/app/routes/server/type";
 import type { KyInstance } from "ky";
+
+export async function gameserver(http: KyInstance, id: number) {
+  const response = await http.get(`/services/${id}/gameservers`);
+
+  return response.json() as Promise<GameserverResponse>;
+}
 
 export async function restart(http: KyInstance, id: number) {
   const response = await http.post(`/services/${id}/gameservers/restart`);
