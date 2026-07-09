@@ -1,4 +1,5 @@
 import { db } from "@/app";
+import { builder } from "@/app/builders/servers";
 import { guildsTable } from "@/app/database/guilds";
 import { ServerRouter } from "@/app/routes/server";
 
@@ -49,10 +50,8 @@ export const chatInput: ChatInputCommand = async (ctx) => {
 
   await new ServerRouter(result.token).stop(input);
 
-  await ctx.interaction.followUp({
-    content: `Server ${input} is stopping...`,
-    flags: "Ephemeral",
-  });
+  const { embed } = builder();
+  await ctx.interaction.followUp({ embeds: [embed] });
 };
 
 export const metadata: CommandMetadata = {
