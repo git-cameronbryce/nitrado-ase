@@ -2,6 +2,8 @@ import type {
   GameserverResponse,
   ServerResponse,
 } from "@/app/routes/server/type";
+import { ActionRowBuilder } from "discord.js";
+import { ButtonBuilder, ButtonStyle } from "discord.js";
 type Gameserver = GameserverResponse["data"]["gameserver"];
 type Service = ServerResponse["data"]["services"][number];
 
@@ -55,16 +57,30 @@ export async function structure(
     .slice(0, 25)
     .forEach((g) => {
       const service = services.find((s) => s.id === g.value.service_id)!;
-      output += `${getStatus(g.value.status)}\n${getName(g.value.query.server_name ?? "Unable to fetch")}\n${getPlayers(g.value.query.player_current, g.value.query.player_max)}\nID: ||${g.value.service_id}||\n\n**Subscription Runtime**\n${getSuspension(service.suspending_in)}\n\n`;
+      output += `${getStatus(g.value.status)}\n${getName(g.value.query.server_name ?? "Gameserver Unavailable")}\n${getPlayers(g.value.query.player_current, g.value.query.player_max)}\nID: ||${g.value.service_id}||\n\n**Subscription Runtime**\n${getSuspension(service.suspending_in)}\n\n`;
     });
 
+  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setLabel("Cluster Action")
+      .setStyle(ButtonStyle.Success)
+      .setCustomId("btn-action"),
+
+    new ButtonBuilder()
+      .setLabel("Support Server")
+      .setStyle(ButtonStyle.Link)
+      .setURL("https://example.com"),
+  );
+
   const embed = new EmbedBuilder()
-    .setDescription(output)
+    .setDescription(
+      `${output}<t:${Math.floor(Date.now() / 1000)}:R>\n**Partnership & Information**\nConsider using our partnership link to purchase your gameservers, it will help fund development.`,
+    )
     .setImage("https://i.imgur.com/bFyqkUS.png")
     .setColor(0x2ecc71)
     .setFooter({
       text: getFooter(services.length),
     });
 
-  return embed;
+  return { embed, row };
 }
