@@ -1,10 +1,10 @@
 import type { EventHandler } from "commandkit";
 
-import { db } from "@/app";
+import { structure } from "@/app/events/clientReady/status/structure";
 import { discordsTable, guildsTable } from "@/app/database/guilds";
 import { ServerRouter } from "@/app/routes/server";
-import { structure } from "@/app/events/clientReady/status/structure";
 import { eq } from "drizzle-orm";
+import { db } from "@/app";
 
 const handler: EventHandler<"clientReady"> = async (client) => {
   const loop = async () => {
@@ -34,8 +34,9 @@ const handler: EventHandler<"clientReady"> = async (client) => {
         const channel = await client.channels.fetch(discord.statusChannel);
         if (!channel?.isTextBased()) return;
 
+        const { embed, row } = await structure(gs, services);
         const message = await channel.messages.fetch(discord.statusMessage);
-        await message.edit({ embeds: [await structure(gs, services)] });
+        await message.edit({ embeds: [embed], components: [row] });
       });
     } catch (error) {
       console.error("Failed to update status:", error);
