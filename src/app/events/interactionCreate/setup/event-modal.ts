@@ -5,7 +5,6 @@ import { TokenRouter } from "@/app/routes/token";
 import type { EventHandler } from "commandkit";
 import { eq } from "drizzle-orm";
 
-// @ts-ignore
 const handler: EventHandler<"interactionCreate"> = async (interaction) => {
   if (!interaction.isModalSubmit()) return;
 
@@ -14,15 +13,15 @@ const handler: EventHandler<"interactionCreate"> = async (interaction) => {
     const guild = interaction.guildId!;
     await interaction.deferReply();
 
-    // prettier-ignore
-    const scopes = (await new TokenRouter(token).get().catch(() => null))
-      ?.data.token.scopes;
+    const scopes = (await new TokenRouter(token).get().catch(() => null))?.data
+      .token.scopes;
 
     if (!scopes || !scopes.includes("service")) {
-      return interaction.followUp({
+      await interaction.followUp({
         content: "Token does not have the required scope: service",
         ephemeral: true,
       });
+      return;
     }
 
     await db.delete(guildsTable).where(eq(guildsTable.guild, guild));
