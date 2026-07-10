@@ -3,7 +3,7 @@
   "compilerOptions": {
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "module": "Preserve",
     "allowImportingTsExtensions": true,
     "esModuleInterop": true,
@@ -19,9 +19,9 @@
     "declaration": false,
     "jsx": "react-jsx",
     "jsxImportSource": "commandkit",
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "discord.js": ["./node_modules/discord.js/typings/index.d.ts"],
     },
   },
   "include": ["src", "commandkit.config.ts", "commandkit-env.d.ts"],
