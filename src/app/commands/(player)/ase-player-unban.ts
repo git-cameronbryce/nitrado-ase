@@ -1,5 +1,5 @@
 import { db } from "@/app";
-import { builder } from "@/app/builders/player";
+import { builder } from "@/app/services/builders/player";
 import { guildsTable } from "@/app/database/guilds";
 import { PlayerRouter } from "@/app/routes/player";
 import { ServerRouter } from "@/app/routes/server";
